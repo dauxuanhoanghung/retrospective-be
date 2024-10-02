@@ -1,0 +1,18 @@
+# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md
+FROM node:20-alpine
+EXPOSE 8080
+WORKDIR /usr/src/app
+
+RUN npm install -g pnpm
+
+COPY .husky/install.mjs .husky/install.mjs
+COPY package.json ./
+
+# Copy files from host to container
+COPY ./ ./
+
+RUN pnpm build
+
+RUN ls -al
+
+CMD ["npm", "run", "dev"]

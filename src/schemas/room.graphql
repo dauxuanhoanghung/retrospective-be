@@ -1,0 +1,6 @@
+type Room {
+  id: ID!
+  name: String!
+  users: [User!]!
+  countDownTime: Float!
+}

@@ -1,0 +1,14 @@
+type Query {
+  hello: String
+}
+
+type User {
+  email: String!
+  name: String!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  # subscription: Subscription
+}
