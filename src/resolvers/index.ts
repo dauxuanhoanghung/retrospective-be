@@ -1,5 +1,15 @@
-export const resolvers = {
+import { IResolvers } from '@graphql-tools/utils'
+import userResolver from './user'
+
+export const resolvers: IResolvers = {
   Query: {
-    hello: () => 'Hello from Apollo Server!'
+    hello: (_: any, args: { name?: string }) => 'Hello from Apollo Server! ' + args.name,
+    ...userResolver.Query
+  },
+  Mutation: {
+    ...userResolver.Mutation
+  },
+  Subscription: {
+    ...userResolver.Subscription
   }
 }

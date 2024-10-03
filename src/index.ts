@@ -1,9 +1,10 @@
+import { expressMiddleware } from '@apollo/server/express4'
 import cors from 'cors'
 import { Request, Response } from 'express'
 
-import { expressMiddleware } from '@apollo/server/express4'
-import apolloServer from './apollo.server'
+import apolloServer from './apollo/server'
 import config from './configs'
+import connectToDatabase from './configs/databases'
 import server from './server'
 import logger from './utilities/logger'
 
@@ -20,6 +21,7 @@ server.use(
 
 async function start() {
   await apolloServer.start()
+  await connectToDatabase()
   server.use(expressMiddleware(apolloServer))
   server.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express!')
@@ -31,4 +33,4 @@ async function start() {
   })
 }
 
-start()
+start().catch((err) => logger.error(err))

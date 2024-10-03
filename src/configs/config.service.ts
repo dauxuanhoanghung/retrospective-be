@@ -11,7 +11,7 @@ class ConfigService {
     this.envConfig = process.env
   }
 
-  get<T = string>(key: string, defaultValue?: T): T | undefined {
+  get<T = string>(key: string, defaultValue?: T): T {
     const value = this.envConfig[key]
 
     if (value === undefined) {

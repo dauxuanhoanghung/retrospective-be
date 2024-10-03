@@ -5,7 +5,7 @@ server.use(
   express.json(),
   express.urlencoded({
     extended: true,
-    limit: '50mb',
+    limit: '50mb'
   })
 )
 export default server
