@@ -18,5 +18,6 @@
   },
   "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
   "include": ["src/**/*"], // Đường dẫn include cho các file cần build
-  "exclude": ["node_modules", "dist"] // Đường dẫn exclude cho các file không cần build
+  "exclude": ["node_modules", "dist"], // Đường dẫn exclude cho các file không cần build
+  "copyFiles": ["src/**/*.graphql"]
 }
