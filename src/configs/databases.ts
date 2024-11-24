@@ -1,6 +1,6 @@
 // src/configs/database.ts
-import logger from '@/utilities/logger'
 import mongoose from 'mongoose'
+import logger from '~/configs/logger'
 import ConfigService from './config.service'
 
 const config = new ConfigService()

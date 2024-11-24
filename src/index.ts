@@ -5,8 +5,8 @@ import { Request, Response } from 'express'
 import apolloServer from './apollo/server'
 import config from './configs'
 import connectToDatabase from './configs/databases'
+import logger from './configs/logger'
 import server from './server'
-import logger from './utilities/logger'
 
 const PORT = config.get<number>('PORT', 8080)
 const FRONTEND_HOST = config.get<string>('FRONTEND_HOST', 'http://localhost:3000')

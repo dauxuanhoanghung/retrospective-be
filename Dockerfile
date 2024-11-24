@@ -1,55 +1,47 @@
-# Declare a Docker build-time variable
-ARG NODE_IMAGE_VERSION=20-alpine
+# Stage 1: Build
+FROM node:20-alpine AS build
 
-### Builder Stage ###
-
-FROM node:${NODE_IMAGE_VERSION} as builder
-
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-RUN npm install -g pnpm
+# Copy package.json and package-lock.json to the working directory
+COPY package.json package-lock.json ./
 
-COPY .husky/install.mjs .husky/install.mjs
-COPY package.json ./
-RUN ls -al
-RUN pnpm install --frozen-lockfile
+# Install dependencies
+RUN npm install
 
-# Copy files from host to container then list it
-COPY ./ ./
-RUN ls -al
+# Copy the rest of the application code to the working directory
+COPY . .
 
-# Build project
-RUN pnpm build:prod
+# Build the TypeScript code
+RUN npm run build
 
-# List files under build directory for reference
-RUN ls -al build
+# Stage 2: Production
+FROM node:20-alpine
 
-### Final Stage ###
+# Set the working directory inside the container
+WORKDIR /usr/src/app
 
-FROM node:${NODE_IMAGE_VERSION} as app
+# Create a non-root user and group
+ARG USER=nodeapp
+ARG GROUP=nodeapp
+RUN addgroup -S $GROUP && adduser -S $USER -G $GROUP
 
-ENV NODE_ENV=production
+# Copy only the necessary files from the build stage
+COPY --from=build /usr/src/app/package.json /usr/src/app/package-lock.json ./
+COPY --from=build /usr/src/app/dist ./dist
 
+# Install only production dependencies
+RUN npm install --only=production
+
+# Change ownership of the application files
+RUN chown -R $USER:$GROUP /usr/src/app
+
+# Switch to the non-root user
+USER $USER
+
+# Expose the port the app runs on
 EXPOSE 8080
 
-WORKDIR /usr/src/app
-
-# Copy the necessary files from the builder stage to this stage
-COPY .husky/install.mjs .husky/install.mjs
-COPY --chown=node:node --from=builder /usr/src/app/build .
-
-RUN npm install -g pnpm
-
-COPY pnpm-lock.yaml ./
-COPY patches ./patches
-# Install production dependencies only
-RUN pnpm install --frozen-lockfile --prod
-
-# List the final directory for reference
-RUN ls -al
-RUN ls ./src -al
-
-# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
-USER node
-
-CMD ["node", "./src/index.ts"]
+# Start the application
+CMD ["node", "dist/index.js"]

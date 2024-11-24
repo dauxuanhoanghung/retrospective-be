@@ -1,18 +1,23 @@
-# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md
+# Use the official Node.js 20 image as the base image
 FROM node:20-alpine
-EXPOSE 8080
+
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-RUN npm install -g pnpm
+# Install nodemon globally
+RUN npm install -g nodemon
 
-COPY .husky/install.mjs .husky/install.mjs
-COPY package.json ./
+# Copy package.json and package-lock.json to the working directory
+COPY package.json package-lock.json ./
 
-# Copy files from host to container
-COPY ./ ./
+# Install dependencies using npm
+RUN npm install
 
-RUN pnpm build
+# Copy the rest of the application code to the working directory
+COPY . .
 
-RUN ls -al
+# Expose the port the app runs on
+EXPOSE 8080
 
+# Use nodemon to start the application in development mode
 CMD ["npm", "run", "dev"]
