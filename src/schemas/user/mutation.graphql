@@ -1,0 +1,4 @@
+# input.graphql
+type Mutation {
+  login(user: LoginInput!): User!
+}

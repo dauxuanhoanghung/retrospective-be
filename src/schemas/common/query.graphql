@@ -1,0 +1,12 @@
+type Query {
+  serverInfo: ServerInfo!
+}
+
+type ServerInfo {
+  host: String!
+  databaseUri: String!
+  databaseUser: String!
+  databasePassword: String!
+  environment: String!
+  frontendUrl: String!
+}
