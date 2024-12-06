@@ -1,4 +1,5 @@
 # input.graphql
 type Mutation {
-  login(user: LoginInput!): User!
+  login(user: LoginInput!): AuthPayload!
+  signup(user: SignupInput!): SignupPayload!
 }

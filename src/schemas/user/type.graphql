@@ -2,3 +2,16 @@ type User {
   email: String!
   name: String
 }
+
+type AuthPayload {
+  success: Boolean!
+  message: String
+  token: String
+  user: User
+}
+
+type SignupPayload {
+  success: Boolean!
+  message: String
+  user: User
+}

@@ -1,9 +1,18 @@
+import userService from '../../services/user.service'
+
 export const userMutations = {
-  login: (_: any, { user }: { user: { email: string; name: string } }) => {
-    console.log('User login details:', user)
+  login: async (_: any, { user }: { user: { email: string; password: string } }) => {
+    const { token, user: loggedInUser } = await userService.login(user)
     return {
-      email: user.email,
-      name: user.name
+      token,
+      user: loggedInUser
     }
+  },
+  signup: async (
+    _: any,
+    { user }: { user: { email: string; name: string; password: string; confirmPassword: string } }
+  ) => {
+    const newUser = await userService.signup(user)
+    return newUser
   }
 }

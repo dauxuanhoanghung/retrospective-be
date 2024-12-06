@@ -1,25 +1,29 @@
 import { expressMiddleware } from '@apollo/server/express4'
 import cors from 'cors'
-import { Request, Response } from 'express'
+import { Express, Request, Response } from 'express'
+import http from 'http'
 
-import apolloServer from './apollo/server'
+import createGraphQLServer from './apollo/server'
 import config from './configs'
 import connectToDatabase from './configs/databases'
 import logger from './configs/logger'
-import server from './server'
+import createExpressServer from './server'
 
 const PORT = config.get<number>('PORT', 8080)
 const FRONTEND_HOST = config.get<string>('FRONTEND_HOST', 'http://localhost:3000')
 
+const server: Express = createExpressServer()
 server.use(
   '/graphql',
-  cors({
+  cors<cors.CorsRequest>({
     origin: FRONTEND_HOST,
+    allowedHeaders: ['Authorization', 'Content-Type'],
     credentials: true
   })
 )
 
 async function start() {
+  const apolloServer = createGraphQLServer(http.createServer(server))
   await apolloServer.start()
   await connectToDatabase()
   server.use(expressMiddleware(apolloServer))
