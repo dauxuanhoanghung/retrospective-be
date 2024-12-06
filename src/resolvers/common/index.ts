@@ -11,4 +11,4 @@ class CommonResolver implements IResolver {
 
 const commonResolver = new CommonResolver({ Query: commonQueries })
 
-export default commonResolver;
+export default commonResolver

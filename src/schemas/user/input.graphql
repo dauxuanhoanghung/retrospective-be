@@ -1,6 +1,6 @@
 input LoginInput {
   email: String!
-  name: String!
+  password: String!
 }
 
 input SignupInput {

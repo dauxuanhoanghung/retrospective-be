@@ -24,6 +24,7 @@ export default [
   ),
   {
     files: ['src/**/*.{ts,js}'],
+    ignores: ['dist/*', 'node_modules/*'],
     plugins: {
       jsdoc: jsdoc,
       '@typescript-eslint': typescriptEslint,
