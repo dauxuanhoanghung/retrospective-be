@@ -1,18 +1,16 @@
 import { IResolvers } from '@graphql-tools/utils'
 
-import commonResolver from './common'
-import userResolver from './user'
+import CommonResolver from './common'
+import { ResolverRegistry } from './resolver.registry'
+import { IResolver } from './types'
+import UserResolver from './user'
 
-export const resolvers: IResolvers = {
+const defaultResolvers: IResolver = {
   Query: {
-    hello: (_: any, args: { name?: string }) => 'Hello from Apollo Server! ' + args.name,
-    ...userResolver.Query,
-    ...commonResolver.Query
-  },
-  Mutation: {
-    ...userResolver.Mutation
-  },
-  Subscription: {
-    ...userResolver.Subscription
+    hello: (_: any, args: { name?: string }) => 'Hello from Apollo Server! ' + args.name
   }
 }
+
+const registry = new ResolverRegistry([CommonResolver, UserResolver], defaultResolvers)
+
+export const resolvers: IResolvers = registry.build()

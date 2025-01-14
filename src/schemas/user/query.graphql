@@ -1,0 +1,6 @@
+#import "../common/input.graphql"
+
+type Query {
+  users(filters: Filters): [User!]!
+  userByEmail(email: String!): User
+}

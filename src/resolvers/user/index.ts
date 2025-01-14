@@ -1,5 +1,6 @@
 import { IResolver, ResolverFunction } from '../types'
 import { userMutations } from './user.mutation'
+import { userQueries } from './user.query'
 
 class UserResolver implements IResolver {
   Query: { [key: string]: ResolverFunction }
@@ -13,6 +14,6 @@ class UserResolver implements IResolver {
   }
 }
 
-const userResolver = new UserResolver({ Mutation: userMutations })
+const userResolver = new UserResolver({ Mutation: userMutations, Query: userQueries })
 
 export default userResolver

@@ -1,0 +1,10 @@
+input Filter {
+  field: String!
+  condition: Condition!
+  value: String!
+}
+
+input Filters {
+  filters: [Filter!]!
+  logic: String
+}

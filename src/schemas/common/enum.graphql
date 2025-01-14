@@ -1,0 +1,55 @@
+"""
+Defines the available conditions for filtering users.
+Each condition corresponds to a MongoDB operator.
+"""
+enum Condition {
+  """
+  Field equals the value
+  """
+  EQUALS
+
+  """
+  Field does not equal the value
+  """
+  NOT_EQUALS
+
+  """
+  Field contains the value (e.g., regex search)
+  """
+  CONTAINS
+
+  """
+  Field is greater than the value
+  """
+  GT
+
+  """
+  Field is less than the value
+  """
+  LT
+
+  """
+  Field is greater than or equal to the value
+  """
+  GTE
+
+  """
+  Field is less than or equal to the value
+  """
+  LTE
+
+  """
+  Field matches any value in a list
+  """
+  IN
+
+  """
+  Field does not match any value in a list
+  """
+  NOT_IN
+
+  """
+  Field exists in the document
+  """
+  EXISTS
+}
