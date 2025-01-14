@@ -1,5 +1,5 @@
-// src/configs/database.ts
 import mongoose from 'mongoose'
+
 import logger from '~/configs/logger'
 import ConfigService from './config.service'
 
@@ -12,7 +12,9 @@ const connectToDatabase = async () => {
   try {
     await mongoose.connect(mongoUri, {
       user,
-      pass: password
+      pass: password,
+      maxPoolSize: 10,
+      minPoolSize: 3
     })
     logger.info('Successfully connected to the database')
   } catch (error) {

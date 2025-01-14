@@ -1,5 +1,6 @@
 import { ApolloServer, BaseContext } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import type http from 'http'
@@ -15,7 +16,11 @@ export default function createGraphQLServer(httpServer: http.Server) {
   const server = new ApolloServer<BaseContext>({
     typeDefs,
     resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+    csrfPrevention: true,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      ApolloServerPluginLandingPageLocalDefault({ embed: true })
+    ]
   })
 
   return server
