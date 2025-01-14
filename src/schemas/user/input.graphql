@@ -9,4 +9,3 @@ input SignupInput {
   password: String!
   confirmPassword: String!
 }
-

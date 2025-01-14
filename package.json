@@ -18,7 +18,8 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
-      "npm run prettier"
+      "npm run prettier:fix",
+      "git add"
     ]
   },
   "keywords": [],
