@@ -3,10 +3,10 @@ type Query {
 }
 
 type ServerInfo {
-  host: String!
+  host: String! @upper
   databaseUri: String!
   databaseUser: String!
   databasePassword: String!
   environment: String!
-  frontendUrl: String!
+  frontendUrl: String! @lower
 }
