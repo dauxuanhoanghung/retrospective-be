@@ -1,47 +1,44 @@
-# Stage 1: Build
-FROM node:20-alpine AS build
+# syntax=docker/dockerfile:1
+ARG NODE_VERSION=20.18
 
-# Set the working directory inside the container
+FROM node:${NODE_VERSION}-alpine AS base
+
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package.json package-lock.json ./
+RUN chown -R node:node /usr/src/app
 
-# Install dependencies
-RUN npm install
+FROM base AS deps
 
-# Copy the rest of the application code to the working directory
+RUN apk add --no-cache python3 make g++ 
+
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --omit=dev --ignore-scripts
+
+RUN npm rebuild bcrypt --build-from-source
+
+FROM deps AS build
+
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci
+
 COPY . .
 
-# Build the TypeScript code
 RUN npm run build
 
-# Stage 2: Production
-FROM node:20-alpine
+FROM base AS final
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
+ENV NODE_ENV=production
 
-# Create a non-root user and group
-ARG USER=nodeapp
-ARG GROUP=nodeapp
-RUN addgroup -S $GROUP && adduser -S $USER -G $GROUP
+USER node
 
-# Copy only the necessary files from the build stage
-COPY --from=build /usr/src/app/package.json /usr/src/app/package-lock.json ./
-COPY --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node package.json .
+COPY --chown=node:node --from=deps /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
-# Install only production dependencies
-RUN npm install --only=production
-
-# Change ownership of the application files
-RUN chown -R $USER:$GROUP /usr/src/app
-
-# Switch to the non-root user
-USER $USER
-
-# Expose the port the app runs on
 EXPOSE 8080
 
-# Start the application
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start", "--ignore-scripts"]

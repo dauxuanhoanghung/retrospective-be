@@ -6,7 +6,7 @@ export const userQueries = {
   //   console.log('Getting user with id:', id)
   //   return { id, name: 'John Doe' }
   // },
-  users: async (_: any, { filters }) => {
+  users: async (_: any, { filters }: { filters: any }) => {
     const { filters: filterArray, logic } = filters
     logger.debug('Filters:', { ...filters })
     return []
