@@ -1,15 +1,13 @@
-// directives/DirectiveManager.ts
 import { GraphQLSchema } from 'graphql'
 
 import { IDirective } from '../types'
-import { LowerDirective } from './lower.directive'
-import { UpperDirective } from './upper.directive'
+import { TransformDirective } from './transform.directive'
 
 export class DirectiveManager {
   private directives: IDirective[] = []
 
   constructor() {
-    this.directives = [new UpperDirective(), new LowerDirective()]
+    this.directives = [new TransformDirective()]
   }
 
   getTypeDefs(): string[] {

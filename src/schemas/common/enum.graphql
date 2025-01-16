@@ -53,3 +53,28 @@ enum Condition {
   """
   EXISTS
 }
+
+"""
+Defines the available transformations for text fields.
+"""
+enum TransformType {
+  """
+  Converts all characters in the field to lowercase
+  """
+  LOWERCASE
+
+  """
+  Converts all characters in the field to uppercase
+  """
+  UPPERCASE
+
+  """
+  Reverses the order of the characters in the field
+  """
+  REVERSE
+
+  """
+  Capitalizes the first character of each word in the field
+  """
+  CAPITALIZE
+}
